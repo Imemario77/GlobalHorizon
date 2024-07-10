@@ -59,7 +59,7 @@
       class="navbar navbar-expand-lg bg-white navbar-light shadow border-top border-5 border-primary sticky-top p-0"
     >
       <a
-        href="index.html"
+        href="/"
         class="navbar-brand bg-primary d-flex align-items-center px-4 px-lg-5"
       >
         <h2 class="mb-2 text-white">Global Horizon Shipping</h2>
@@ -74,10 +74,10 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-          <a href="index.html" class="nav-item nav-link active">Home</a>
-          <a href="about.html" class="nav-item nav-link">About</a>
-          <a href="service.html" class="nav-item nav-link">Services</a>
-          <a href="contact.html" class="nav-item nav-link">Contact</a>
+          <a href="/" class="nav-item nav-link active">Home</a>
+          <a href="/about" class="nav-item nav-link">About</a>
+          <a href="/service" class="nav-item nav-link">Services</a>
+          <a href="/contact" class="nav-item nav-link">Contact</a>
           <a href="#track-box" class="nav-item nav-link">Track</a>
         </div>
       </div>
@@ -109,14 +109,9 @@
                     shipments arrive safely and on time, anywhere in the world.
                   </p>
                   <a
-                    href="about.html"
+                    href="/about"
                     class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft"
                     >Learn More</a
-                  >
-                  <a
-                    href="quote.html"
-                    class="btn btn-secondary py-md-3 px-md-5 animated slideInRight"
-                    >Get a Quote</a
                   >
                 </div>
               </div>
@@ -146,12 +141,12 @@
                     advanced tracking for your valuable cargo.
                   </p>
                   <a
-                    href="service.html"
+                    href="/service"
                     class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft"
                     >Our Services</a
                   >
                   <a
-                    href="contact.html"
+                    href="/contact"
                     class="btn btn-secondary py-md-3 px-md-5 animated slideInRight"
                     >Contact Us</a
                   >
@@ -166,22 +161,18 @@
 
     <h2 id="track-box">Track Your Parcel</h2>
 
-    <div class="container-fluid p-5 track-pad-box">
-      <div class="row track-pad-box-row">
-        <div class="col-md-8">
-          <div class="input-group">
-            <input
-              type="text"
-              class="form-control track-pad-box-input"
-              placeholder="Enter Your Tracking ID"
-              aria-label="Tracking ID"
-              aria-describedby="button-addon2"
-            />
-            <button class="btn btn-primary" type="button" id="button-addon2">
-              Track Order Now
-            </button>
-          </div>
-        </div>
+    <div class="track-pad-box">
+      <div class="track-pad-box-row">
+        <input
+          type="text"
+          class="track-pad-box-input"
+          placeholder="Enter Your Tracking ID"
+          aria-label="Tracking ID"
+          aria-describedby=""
+        />
+        <button class="btn btn-primary" type="button" id="button-addon2">
+          Track Order Now
+        </button>
       </div>
     </div>
 
@@ -230,7 +221,7 @@
                 </p>
               </div>
             </div>
-            <a href="about.html" class="btn btn-primary py-3 px-5"
+            <a href="/about" class="btn btn-primary py-3 px-5"
               >Learn More</a
             >
           </div>
@@ -269,13 +260,13 @@
                   data-wow-delay="0.3s"
                 >
                   <i class="fa fa-route fa-2x text-white mb-3"></i>
-                  <h2 class="text-white mb-2" data-toggle="counter-up">50</h2>
+                  <h2 class="text-white mb-2" data-toggle="counter-up">132</h2>
                   <p class="text-white mb-0">Countries Served</p>
                 </div>
                 <div class="bg-secondary p-4 wow fadeIn" data-wow-delay="0.5s">
                   <i class="fa fa-handshake fa-2x text-white mb-3"></i>
                   <h2 class="text-white mb-2">
-                    <span data-toggle="counter-up">100</span>%
+                    <span data-toggle="counter-up">94</span>%b
                   </h2>
                   <p class="text-white mb-0">Customer Satisfaction</p>
                 </div>
@@ -291,14 +282,14 @@
                   <i class="fa fa-star fa-2x text-white mb-3"></i>
                   <i class="fa fa-star fa-2x text-white mb-3"></i>
                   <h2 class="text-white mb-2" data-toggle="counter-up">
-                    500000
+                    2,627,351
                   </h2>
                   <p class="text-white mb-0">Customer Reviews</p>
                 </div>
                 <div class="bg-primary p-4 wow fadeIn" data-wow-delay="0.5s">
                   <i class="fa fa-ship fa-2x text-white mb-3"></i>
                   <h2 class="text-white mb-2">
-                    <span data-toggle="counter-up">100</span>M
+                    <span data-toggle="counter-up">8,151,429</span>
                   </h2>
                   <p class="text-white mb-0">Complete Shipments</p>
                 </div>
@@ -332,7 +323,7 @@
                 Fast and reliable air freight services for time-sensitive
                 shipments to any destination worldwide.
               </p>
-              <a class="btn-slide mt-2" href="service.html#air"
+              <a class="btn-slide mt-2" href="/#track-box"
                 ><i class="fa fa-arrow-right"></i><span>Track Now</span></a
               >
             </div>
@@ -351,7 +342,7 @@
                 Cost-effective and efficient ocean freight solutions for
                 large-volume shipments across the globe.
               </p>
-              <a class="btn-slide mt-2" href="service.html#ocean"
+              <a class="btn-slide mt-2" href="/#track-box"
                 ><i class="fa fa-arrow-right"></i><span>Track Now</span></a
               >
             </div>
@@ -370,7 +361,7 @@
                 Flexible and door-to-door road freight services for regional and
                 domestic shipments.
               </p>
-              <a class="btn-slide mt-2" href="service.html#road"
+              <a class="btn-slide mt-2" href="/#track-box"
                 ><i class="fa fa-arrow-right"></i><span>Track Now</span></a
               >
             </div>
@@ -389,7 +380,7 @@
                 Efficient and reliable train freight services for large-scale
                 cargo transportation across continents.
               </p>
-              <a class="btn-slide mt-2" href="service.html#train"
+              <a class="btn-slide mt-2" href="/#track-box"
                 ><i class="fa fa-arrow-right"></i><span>Track Now</span></a
               >
             </div>
@@ -408,7 +399,7 @@
                 Expert assistance with customs documentation and procedures for
                 smooth international shipping.
               </p>
-              <a class="btn-slide mt-2" href="service.html#customs"
+              <a class="btn-slide mt-2" href="/#track-box"
                 ><i class="fa fa-arrow-right"></i><span>Track Now</span></a
               >
             </div>
@@ -427,7 +418,7 @@
                 Secure and efficient warehousing and distribution services to
                 optimize your supply chain.
               </p>
-              <a class="btn-slide mt-2" href="service.html#warehouse"
+              <a class="btn-slide mt-2" href="/#track-box"
                 ><i class="fa fa-arrow-right"></i><span>Track Now</span></a
               >
             </div>
@@ -747,9 +738,9 @@
           </div>
           <div class="col-lg-3 col-md-6">
             <h4 class="text-light mb-4">Quick Links</h4>
-            <a class="btn btn-link" href="about.html">About Us</a>
-            <a class="btn btn-link" href="contact.html">Contact Us</a>
-            <a class="btn btn-link" href="service.html">Our Services</a>
+            <a class="btn btn-link" href="/about">About Us</a>
+            <a class="btn btn-link" href="/contact">Contact Us</a>
+            <a class="btn btn-link" href="/service">Our Services</a>
             <a class="btn btn-link" href="testimonial.html">Testimonials</a>
           </div>
         </div>
