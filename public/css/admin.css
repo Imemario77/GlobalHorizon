@@ -11,27 +11,9 @@ h1 {
   color: #333;
 }
 
-/* form {
-  max-width: 400px;
-  margin: 20px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
-} */
 
-/* input[type="email"],
-input[type="password"],
-input[type="text"],
-input[type="number"] {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-} */
 
-button {
+.button {
   width: 100%;
   padding: 10px;
   background-color: #5cb85c;
@@ -42,7 +24,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.button:hover {
   background-color: #4cae4c;
 }
 
@@ -66,6 +48,10 @@ td {
   padding: 10px;
   border: 1px solid #ccc;
   text-align: left;
+  width: 20% !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 th {
@@ -157,4 +143,29 @@ select:focus {
   outline: none; /* Remove default outline */
   border-color: #5cb85c; /* Border color on focus */
   box-shadow: 0 0 5px rgba(92, 184, 92, 0.5); /* Add shadow on focus */
+}
+
+.action-btn {
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.del {
+  color: red;
+}
+
+.view {
+  color: #4cae4c;
+}
+
+.action-btn-con {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.act-btn-holder {
+  border: none;
+  background-color: transparent;
 }

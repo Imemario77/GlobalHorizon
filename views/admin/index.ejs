@@ -42,7 +42,7 @@
     <div class="dashboard">
       <div class="header-dash">
         <h1>Admin Dashboard</h1>
-        <button class="btn btn-primary">
+        <button class="btn btn-primary button">
           <i class="fas fa-plus"></i> Add New Order
         </button>
       </div>
@@ -52,8 +52,8 @@
             <th>Order ID</th>
             <th>User Email</th>
             <th>Product Type</th>
-            <th>Quantity</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -61,11 +61,28 @@
           orders.forEach(order => { %>
           <tr>
             <td><%= order.id %></td>
-            <td><%= order.user_id %></td>
-            <td><%= order.product_id %></td>
-            <td><%= order.quantity %></td>
+            <td><%= order.email%></td>
+            <td><%= order.item %></td>
             <td><%= order.status || 'Pending' %></td>
+            <td>
+              <div class="action-btn-con">
+                <button class="act-btn-holder">
+                  <i class="fas fa-eye action-btn view"></i>
+                </button>
+                <form
+                  action="/admin/order/delete"
+                  onsubmit="return confirmDelete();"
+                  method="post"
+                >
+                  <input type="hidden" name="order" value="<%= order.id %>" />
+                  <button class="act-btn-holder">
+                    <i class="fas fa-trash action-btn del"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
           </tr>
+
           <% }); %> <% } else { %>
           <tr>
             <td colspan="5">There currently is no order</td>
@@ -82,39 +99,44 @@
       <div class="modal-content">
         <button class="close-btn" onclick="closeModal()">&times;</button>
         <h2>Add New Order</h2>
-        <form action="/create-order" method="POST">
+        <form action="/admin/order" method="POST">
           <input type="email" name="email" placeholder="User Email" required />
+          <input type="text" name="item" placeholder="Product Type" required />
           <input
             type="text"
-            name="parcelType"
-            placeholder="Product Type"
+            name="shipping_address"
+            placeholder="Shipping address"
             required
           />
-          <select id="shipment-status" name="shipment_status">
-            <option value="clearance_delay">
+          <select id="shipment-status" name="status">
+            <option
+              value="Clearance delay (includes International shipment release)"
+            >
               Clearance delay (includes International shipment release)
             </option>
-            <option value="delivered_shipments">Delivered shipments</option>
-            <option value="delivery_exception">Delivery exception</option>
-            <option value="held_for_pickup">
+            <option value="Delivered shipments">Delivered shipments</option>
+            <option value="Delivery exception">Delivery exception</option>
+            <option
+              value="Held for pickup (includes Delivery option confirmed)"
+            >
               Held for pickup (includes Delivery option confirmed)
             </option>
-            <option value="ipd_idf_prealert">IPD/IDF PreAlert</option>
-            <option value="inbound_alert">Inbound Alert</option>
-            <option value="incorrect_address">Incorrect address</option>
-            <option value="intl_shipment_release">
+            <option value="IPD/IDF PreAlert">IPD/IDF PreAlert</option>
+            <option value="Inbound Alert">Inbound Alert</option>
+            <option value="Incorrect address">Incorrect address</option>
+            <option value="Int'l Shipment Release">
               Int'l Shipment Release
             </option>
-            <option value="list_of_shipments">List of shipments</option>
-            <option value="returns_notifications">Returns Notifications</option>
-            <option value="returns_summary_notifications">
+            <option value="List of shipments">List of shipments</option>
+            <option value="Returns Notifications">Returns Notifications</option>
+            <option value="Returns Summary Notifications">
               Returns Summary Notifications
             </option>
-            <option value="tendered_to_fedex_summary">
+            <option value="Tendered to FedEx Summary">
               Tendered to FedEx Summary
             </option>
           </select>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary button">Submit</button>
         </form>
       </div>
     </div>
@@ -147,6 +169,10 @@
           allowClear: true,
         });
       });
+
+      function confirmDelete() {
+        return confirm("Are you sure you want to delete this order?");
+      }
     </script>
   </body>
 </html>

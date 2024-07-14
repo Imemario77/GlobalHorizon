@@ -3,15 +3,17 @@ import session from "express-session";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { createClient } from "@supabase/supabase-js";
+import { config } from "dotenv";
+import { threadId } from "worker_threads";
+config();
 
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
 // Supabase Configuration (Replace with your credentials)
-const supabaseUrl = "https://hrjnfdqruuenjieffspf.supabase.co";
-const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhyam5mZHFydXVlbmppZWZmc3BmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjA2NTQ3ODUsImV4cCI6MjAzNjIzMDc4NX0.PvujPAR0_LI9sREcht8-LDTVMbn5TbUYUQVVs895gXA";
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Express Setup
@@ -20,8 +22,7 @@ app.use(express.static("public"));
 
 app.use(
   session({
-    secret:
-      "c29tZSByYW5kb20gc3RyaW5nIHdpdGggcmFuZG9tIHN0cmluZyBhbmQgcGFyYWxsbGVsIHNjaGVtZXMgYW5kIGNvbW1lbnRz",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
   })
@@ -41,9 +42,7 @@ const authenticate = async (req, res, next) => {
       data: { user },
       error,
     } = await supabase.auth.getUser(access_token);
-    if (error) {
-      return res.redirect("/admin/login"); // Redirect if unauthorized
-    }
+    if (error) throw Error(error.message); // Redirect if unauthorized
 
     req.user = user; // Attach user info to request
     next();
@@ -105,26 +104,35 @@ app.get("/admin/register", (req, res) => {
 
 // post routes
 
-app.post("/orders", authenticate, async (req, res) => {
-  const { product_id, quantity } = req.body;
-  const userId = req.session.user.id; // Get user ID from session
+app.post("/admin/order", authenticate, async (req, res) => {
+  const { email, status, shipping_address, item } = req.body;
+  const userId = req.user.id; // Get user ID
 
-  const { data, error } = await supabase
-    .from("orders")
-    .insert([{ user_id: userId, product_id, quantity }]);
+  const { error } = await supabase
+    .from("order")
+    .insert([{ userId, email, status, shipping_address, item }]);
 
   if (error) return res.status(400).send(error.message);
-  res.redirect("/orders"); // Redirect to orders page
+  res.redirect("/admin/dashboard");
+});
+
+app.post("/admin/order/delete", authenticate, async (req, res) => {
+  const { order } = req.body;
+
+  const { error } = await supabase.from("order").delete().eq("id", order);
+
+  if (error) return res.status(400).send(error.message);
+  res.redirect("/admin/dashboard");
 });
 
 // handling authorizations
 // Register User
 app.post("/admin/register", async (req, res) => {
   const { email, password } = req.body;
-  // if (email.lenght == 0 || password.lenght == 0)
-  //   return res.render("admin/register", {
-  //     error: "no field should be left empty",
-  //   });
+  if (email.lenght == 0 || password.lenght == 0)
+    return res.render("admin/register", {
+      error: "no field should be left empty",
+    });
   try {
     const { user, error } = await supabase.auth.signUp({ email, password });
     if (error)
