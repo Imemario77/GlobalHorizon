@@ -84,7 +84,7 @@ app.get("/track", async (req, res) => {
 
     // Handle error from Supabase
     if (error || !order) {
-      return res.render("track", { error: "Tracking id not found.", id });
+      return res.render("track", { error: "Tracking id is invalid.", id });
     }
 
     // Render the order details page (create an appropriate EJS template)
