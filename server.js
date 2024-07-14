@@ -72,10 +72,30 @@ app.get("/testimonial", (req, res) => {
   res.render("testimonial");
 });
 
-app.get("/track", (req, res) => {
+app.get("/track", async (req, res) => {
   const { id } = req.query;
-  console.log(id);
-  res.render("track", { id });
+  try {
+    // Fetch order details using the tracking ID
+    const { data: order, error } = await supabase
+      .from("order") // Replace with your actual table name
+      .select("*")
+      .eq("id", id) // Adjust this to the correct column name
+      .single();
+
+    // Handle error from Supabase
+    if (error || !order) {
+      return res.render("track", { error: "Tracking id not found.", id });
+    }
+
+    // Render the order details page (create an appropriate EJS template)
+    res.render("track", { order, id, error: null });
+  } catch (err) {
+    console.error(err); // Log the error for debugging
+    res.render("track", {
+      error: "An error occurred while fetching the order.",
+      id,
+    });
+  }
 });
 
 app.get("/admin/dashboard", authenticate, async (req, res) => {
@@ -99,6 +119,12 @@ app.get("/admin/register", (req, res) => {
   if (req.session.access_token) res.redirect("/admin/dashboard");
 
   res.render("admin/register", { error: null });
+});
+
+app.get("/admin/reset", (req, res) => {
+  if (req.session.access_token) res.redirect("/admin/dashboard");
+
+  res.render("admin/reset", { error: null, sent: null });
 });
 
 // Route to view a specific order
@@ -141,7 +167,7 @@ app.post("/admin/order/delete", authenticate, async (req, res) => {
   res.redirect("/admin/dashboard");
 });
 
-app.post("/admin/order/edit", async (req, res) => {
+app.post("/admin/order/edit", authenticate, async (req, res) => {
   const { email, status, shipping_address, item, id } = req.body;
 
   try {
@@ -208,6 +234,27 @@ app.post("/admin/login", async (req, res) => {
   req.session.access_token = session.access_token;
 
   res.redirect("/admin/dashboard");
+});
+
+app.post("/admin/reset", async (req, res) => {
+  const { email } = req.body;
+  try {
+    if (email.lenght == 0)
+      return res.render("admin/login", {
+        error: "no field should be left empty",
+      });
+
+    let { data, error } = await supabase.auth.resetPasswordForEmail(email);
+
+    if (error)
+      return res
+        .status(401)
+        .render("admin/reset", { error: error.message, sent: false });
+
+    res.render("/admin/reset", { sent: true, error: null });
+  } catch (error) {
+    res.render("/admin/reset", { sent: true, error: error.message });
+  }
 });
 
 // Logout User

@@ -37,6 +37,46 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet" />
+
+    <style>
+      .track-order-details {
+        max-width: 600px; /* Set a maximum width for the table */
+        margin: 20px auto; /* Center the table horizontally */
+        padding: 20px; /* Add padding around the table */
+        background-color: #fff; /* White background for the table */
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+      }
+
+      .track-order-details table {
+        width: 100%; /* Make the table take full width */
+        border-collapse: collapse; /* Remove gaps between cells */
+      }
+
+      .track-order-details th,
+      .track-order-details td {
+        padding: 12px; /* Add padding to table cells */
+        border-bottom: 1px solid #ddd; /* Light border for separation */
+        text-align: left; /* Align text to the left */
+      }
+
+      .track-order-details th {
+        background-color: #f2f2f2; /* Light gray background for headers */
+        font-weight: 600; /* Bold headers */
+      }
+
+      /* Responsive styles */
+      @media (max-width: 768px) {
+        .track-order-details {
+          padding: 10px; /* Reduce padding on smaller screens */
+        }
+
+        .track-order-details th,
+        .track-order-details td {
+          padding: 10px; /* Reduce padding on smaller screens */
+        }
+      }
+    </style>
   </head>
 
   <body>
@@ -78,27 +118,55 @@
           <a href="/about" class="nav-item nav-link">About</a>
           <a href="/service" class="nav-item nav-link">Services</a>
           <a href="/contact" class="nav-item nav-link">Contact</a>
-          <a href="/track#track-box" class="nav-item nav-link">Track</a>
         </div>
       </div>
     </nav>
 
-    <h2 style="margin-top: 100px;" id="track-box">Track Your Parcel</h2>
+    <h2 style="margin-top: 100px" id="track-box">Track Your Parcel</h2>
 
     <div class="track-pad-box">
-      <div class="track-pad-box-row">
+      <form class="track-pad-box-row" method="get" action="/track">
         <input
           type="text"
           class="track-pad-box-input"
           placeholder="Enter Your Tracking ID"
           aria-label="Tracking ID"
-          aria-describedby=""
+          name="id"
           value="<%= id %>"
         />
-        <button class="btn btn-primary" type="button" id="button-addon2">
-          Track Order Now
+        <button class="btn btn-primary" type="submit" id="button-addon2">
+          Track Now
         </button>
-      </div>
+      </form>
+    </div>
+
+    <div class="track-order-details">
+      <% if (error) { %>
+      <p><%= error %></p>
+      <% } else { %>
+      <table>
+        <tr>
+          <th>Tracking ID</th>
+          <td><%= order.id %></td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td><%= order.email %></td>
+        </tr>
+        <tr>
+          <th>Product Type</th>
+          <td><%= order.item %></td>
+        </tr>
+        <tr>
+          <th>Status</th>
+          <td><%= order.status || 'Pending' %></td>
+        </tr>
+        <tr>
+          <th>Shipping Address</th>
+          <td><%= order.shipping_address %></td>
+        </tr>
+      </table>
+      <% } %>
     </div>
 
     <!-- Footer Start -->

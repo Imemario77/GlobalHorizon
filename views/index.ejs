@@ -160,20 +160,19 @@
     <!-- Carousel End -->
 
     <h2 id="track-box">Track Your Parcel</h2>
-
     <div class="track-pad-box">
-      <div class="track-pad-box-row">
+      <form class="track-pad-box-row" method="get" action="/track">
         <input
           type="text"
           class="track-pad-box-input"
           placeholder="Enter Your Tracking ID"
           aria-label="Tracking ID"
-          aria-describedby=""
+          name="id"
         />
-        <button class="btn btn-primary" type="button" id="button-addon2">
-          Track Order Now
+        <button class="btn btn-primary" type="submit" id="button-addon2">
+          Track Now
         </button>
-      </div>
+      </form>
     </div>
 
     <!-- About Start -->
@@ -244,8 +243,7 @@
               dedicated team ensure seamless logistics solutions tailored to
               your specific needs.
             </p>
-            <div class="d-flex align-items-center">
-            </div>
+            <div class="d-flex align-items-center"></div>
           </div>
           <div class="col-lg-6">
             <div class="row g-4 align-items-center">

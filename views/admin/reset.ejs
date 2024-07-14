@@ -7,11 +7,13 @@
   </head>
   <body>
     <div class="login__container">
-      <h1 class="login__title">Login</h1>
+      <h1 class="login__title">Reset Password</h1>
       <% if (error) { %>
       <p class="login__error"><%= error %></p>
+      <% } %> <% if (sent) { %>
+      <p style="color: greenyellow">an email has been sent to you</p>
       <% } %>
-      <form class="login__form" action="/admin/login" method="POST">
+      <form class="login__form" action="/admin/reset" method="POST">
         <input
           type="email"
           name="email"
@@ -19,18 +21,10 @@
           placeholder="Email"
           required
         />
-        <input
-          type="password"
-          name="password"
-          class="login__input"
-          placeholder="Password"
-          required
-        />
-        <button type="submit" class="login__button">Login</button>
-        <a style="margin: 20px 0; align-self: flex-end;" href="/admin/reset">forgot password</a>
+        <button type="submit" class="login__button">Reset</button>
       </form>
       <p class="login__link">
-        Don't have an account? <a href="/admin/register">Register here</a>
+        <a href="/admin/login">Back to login</a>
       </p>
     </div>
   </body>
