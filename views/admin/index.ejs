@@ -42,14 +42,21 @@
     <div class="dashboard">
       <div class="header-dash">
         <h1>Admin Dashboard</h1>
-        <button class="btn btn-primary button">
-          <i class="fas fa-plus"></i> Add New Order
-        </button>
+        <div>
+          <a
+            href="/"
+            style="margin-right: 30px; text-decoration: none; font-size: large"
+            >Home</a
+          >
+          <button class="btn btn-primary button">
+            <i class="fas fa-plus"></i> Add New Tracking
+          </button>
+        </div>
       </div>
       <table>
         <thead>
           <tr>
-            <th>Order ID</th>
+            <th>Tracking ID</th>
             <th>User Email</th>
             <th>Product Type</th>
             <th>Status</th>
@@ -66,9 +73,9 @@
             <td><%= order.status || 'Pending' %></td>
             <td>
               <div class="action-btn-con">
-                <button class="act-btn-holder">
+                <a href="/admin/order/<%= order.id %>" class="act-btn-holder">
                   <i class="fas fa-eye action-btn view"></i>
-                </button>
+                </a>
                 <form
                   action="/admin/order/delete"
                   onsubmit="return confirmDelete();"
@@ -85,7 +92,7 @@
 
           <% }); %> <% } else { %>
           <tr>
-            <td colspan="5">There currently is no order</td>
+            <td colspan="5">There currently is nothing to track</td>
           </tr>
           <% } %> <% } else { %>
           <tr>
@@ -108,34 +115,13 @@
             placeholder="Shipping address"
             required
           />
-          <select id="shipment-status" name="status">
-            <option
-              value="Clearance delay (includes International shipment release)"
-            >
-              Clearance delay (includes International shipment release)
-            </option>
-            <option value="Delivered shipments">Delivered shipments</option>
-            <option value="Delivery exception">Delivery exception</option>
-            <option
-              value="Held for pickup (includes Delivery option confirmed)"
-            >
-              Held for pickup (includes Delivery option confirmed)
-            </option>
-            <option value="IPD/IDF PreAlert">IPD/IDF PreAlert</option>
-            <option value="Inbound Alert">Inbound Alert</option>
-            <option value="Incorrect address">Incorrect address</option>
-            <option value="Int'l Shipment Release">
-              Int'l Shipment Release
-            </option>
-            <option value="List of shipments">List of shipments</option>
-            <option value="Returns Notifications">Returns Notifications</option>
-            <option value="Returns Summary Notifications">
-              Returns Summary Notifications
-            </option>
-            <option value="Tendered to FedEx Summary">
-              Tendered to FedEx Summary
-            </option>
-          </select>
+          <input
+            type="text"
+            name="status"
+            placeholder="status"
+            value=""
+            required
+          />
           <button type="submit" class="btn btn-primary button">Submit</button>
         </form>
       </div>

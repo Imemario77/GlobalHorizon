@@ -81,7 +81,6 @@ app.get("/track", (req, res) => {
 app.get("/admin/dashboard", authenticate, async (req, res) => {
   try {
     const { data: orders, error } = await supabase.from("order").select("*");
-    console.log(orders);
     if (error) throw Error("An error occured");
     res.render("admin/index", { orders, error: null });
   } catch (error) {
@@ -100,6 +99,23 @@ app.get("/admin/register", (req, res) => {
   if (req.session.access_token) res.redirect("/admin/dashboard");
 
   res.render("admin/register", { error: null });
+});
+
+// Route to view a specific order
+app.get("/admin/order/:id", authenticate, async (req, res) => {
+  const { id } = req.params;
+
+  const { data: order, error } = await supabase
+    .from("order")
+    .select("*")
+    .eq("id", id)
+    .single(); // Fetch single record
+
+  if (error) {
+    return res.status(404).send("Order not found");
+  }
+
+  res.render("admin/order", { order });
 });
 
 // post routes
@@ -125,6 +141,29 @@ app.post("/admin/order/delete", authenticate, async (req, res) => {
   res.redirect("/admin/dashboard");
 });
 
+app.post("/admin/order/edit", async (req, res) => {
+  const { email, status, shipping_address, item, id } = req.body;
+
+  try {
+    const { data, error } = await supabase
+      .from("order")
+      .update({
+        email: email,
+        status: status,
+        shipping_address: shipping_address,
+        item: item,
+      })
+      .eq("id", id)
+      .select();
+
+    if (error) return res.status(400).send(error.message);
+
+    res.redirect("/admin/order/" + id);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 // handling authorizations
 // Register User
 app.post("/admin/register", async (req, res) => {
@@ -142,6 +181,7 @@ app.post("/admin/register", async (req, res) => {
       .status(401)
       .render("admin/register", { error: "Internal server error" });
   }
+
   res.redirect("/admin/login");
 });
 
@@ -162,7 +202,6 @@ app.post("/admin/login", async (req, res) => {
     password,
   });
 
-  console.log(session);
   if (error)
     return res.status(401).render("admin/login", { error: error.message });
 
