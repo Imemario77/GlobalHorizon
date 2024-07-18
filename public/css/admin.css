@@ -11,8 +11,6 @@ h1 {
   color: #333;
 }
 
-
-
 .button {
   width: 100%;
   padding: 10px;
@@ -168,4 +166,74 @@ select:focus {
 .act-btn-holder {
   border: none;
   background-color: transparent;
+}
+
+.my-prefix-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.my-prefix-column {
+  flex: 1;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.my-prefix-column h2 {
+  margin-top: 0;
+}
+
+.my-prefix-column label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.my-prefix-column input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.my-prefix-container section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.my-prefix-parcel label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.my-prefix-parcel input {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.my-prefix-parcel {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+.Upload-tracking {
+  margin: 0 30px 50px;
+  padding: 10px 40px;
+}
+
+@media (max-width: 768px) {
+  .my-prefix-container {
+    flex-direction: column;
+  }
 }

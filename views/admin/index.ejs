@@ -48,7 +48,10 @@
             style="margin-right: 30px; text-decoration: none; font-size: large"
             >Home</a
           >
-          <button class="btn btn-primary button">
+          <button
+            onclick="window.localStorage='/admin/tracker'"
+            class="btn btn-primary button"
+          >
             <i class="fas fa-plus"></i> Add New Tracking
           </button>
         </div>
@@ -57,7 +60,7 @@
         <thead>
           <tr>
             <th>Tracking ID</th>
-            <th>User Email</th>
+            <th>Recipient Email</th>
             <th>Product Type</th>
             <th>Status</th>
             <th>Actions</th>
@@ -131,34 +134,12 @@
       const orderModal = document.getElementById("orderModal");
 
       document.querySelector(".btn-primary").onclick = function () {
-        orderModal.style.display = "flex"; // Show modal
-      };
-
-      function closeModal() {
-        orderModal.style.display = "none"; // Hide modal
-      }
-
-      // Optional: Close modal when clicking outside the modal content
-      window.onclick = function (event) {
-        if (event.target === orderModal) {
-          closeModal();
-        }
+        // orderModal.style.display = "flex"; // Show modal
+        window.location = "/admin/tracker";
       };
     </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        $("#shipment-status").select2({
-          placeholder: "Select Shipment Status",
-          allowClear: true,
-        });
-      });
-
-      function confirmDelete() {
-        return confirm("Are you sure you want to delete this order?");
-      }
-    </script>
   </body>
 </html>

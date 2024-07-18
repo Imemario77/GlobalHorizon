@@ -81,6 +81,14 @@
         justify-content: space-between;
         align-items: center;
       }
+
+      .edit-Modal {
+        width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+      }
     </style>
   </head>
   <body>
@@ -92,8 +100,28 @@
           <td><%= order.id %></td>
         </tr>
         <tr>
-          <th>User Email</th>
+          <th>Recipient Name</th>
+          <td><%= order.recipient_name %></td>
+        </tr>
+        <tr>
+          <th>Recipient Email</th>
           <td><%= order.email %></td>
+        </tr>
+        <tr>
+          <th>Recipient Address</th>
+          <td><%= order.recipient_address %></td>
+        </tr>
+        <tr>
+          <th>Sender Name</th>
+          <td><%= order.sender_name %></td>
+        </tr>
+        <tr>
+          <th>Sender Email</th>
+          <td><%= order.sender_email %></td>
+        </tr>
+        <tr>
+          <th>Sender Address</th>
+          <td><%= order.sender_address %></td>
         </tr>
         <tr>
           <th>Product Type</th>
@@ -102,6 +130,22 @@
         <tr>
           <th>Status</th>
           <td><%= order.status || 'Pending' %></td>
+        </tr>
+        <tr>
+          <th>Width (cm)</th>
+          <td><%= order.width %></td>
+        </tr>
+        <tr>
+          <th>Height (cm)</th>
+          <td><%= order.height %></td>
+        </tr>
+        <tr>
+          <th>Length (cm)</th>
+          <td><%= order.length %></td>
+        </tr>
+        <tr>
+          <th>Weight (kg)</th>
+          <td><%= order.weight %></td>
         </tr>
         <tr>
           <th>Shipping Address</th>
@@ -114,7 +158,9 @@
       </table>
       <div class="con">
         <a href="/admin/dashboard" class="btn btn-primary">Back to Orders</a>
-        <button class="button edit-Modal">Edit</button>
+        <a href="/admin/order/<%= order.id %>/edit" class="button edit-Modal"
+          >Edit</a
+        >
       </div>
     </div>
     <div class="admin-modal" id="orderModal">
@@ -184,7 +230,7 @@
       </div>
     </div>
 
-    <script>
+    <!-- <script>
       const orderModal = document.getElementById("orderModal");
 
       document.querySelector(".edit-Modal").onclick = function () {
@@ -201,17 +247,17 @@
           closeModal();
         }
       };
-    </script>
+    </script> -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
     <script>
-      $(document).ready(function () {
-        $("#shipment-status").select2({
-          placeholder: "Select Shipment Status",
-          allowClear: true,
-        });
-      });
+      // $(document).ready(function () {
+      //   $("#shipment-status").select2({
+      //     placeholder: "Select Shipment Status",
+      //     allowClear: true,
+      //   });
+      // });
 
       function confirmDelete() {
         return confirm("Are you sure you want to delete this order?");

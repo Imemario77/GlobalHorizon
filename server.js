@@ -110,6 +110,10 @@ app.get("/admin/dashboard", authenticate, async (req, res) => {
   }
 });
 
+app.get("/admin/tracker", authenticate, async (req, res) => {
+  res.render("admin/tracking");
+});
+
 app.get("/admin/login", (req, res) => {
   if (req.session.access_token) res.redirect("/admin/dashboard");
   res.render("admin/login", { error: null });
@@ -144,15 +148,62 @@ app.get("/admin/order/:id", authenticate, async (req, res) => {
   res.render("admin/order", { order });
 });
 
+// Route to view a specific order
+app.get("/admin/order/:id/edit", authenticate, async (req, res) => {
+  const { id } = req.params;
+
+  const { data: order, error } = await supabase
+    .from("order")
+    .select("*")
+    .eq("id", id)
+    .single(); // Fetch single record
+
+  if (error) {
+    return res.status(404).send("Order not found");
+  }
+
+  res.render("admin/editTrack", { order });
+});
+
 // post routes
 
 app.post("/admin/order", authenticate, async (req, res) => {
-  const { email, status, shipping_address, item } = req.body;
+  const {
+    senderName,
+    senderEmail,
+    senderAddress,
+    parcelHeight,
+    parcelWidth,
+    parcelLength,
+    parcelWeight,
+    recipientName,
+    recipientEmail,
+    recipientAddress,
+    item,
+    shipping_address,
+    status,
+  } = req.body;
+
   const userId = req.user.id; // Get user ID
 
-  const { error } = await supabase
-    .from("order")
-    .insert([{ userId, email, status, shipping_address, item }]);
+  const { error } = await supabase.from("order").insert([
+    {
+      userId,
+      email: recipientEmail,
+      status,
+      sender_address: senderAddress,
+      sender_email: senderEmail,
+      sender_name: senderName,
+      shipping_address,
+      item,
+      recipient_name: recipientName,
+      recipient_address: recipientAddress,
+      height: parcelHeight,
+      length: parcelLength,
+      weight: parcelWeight,
+      width: parcelWidth,
+    },
+  ]);
 
   if (error) return res.status(400).send(error.message);
   res.redirect("/admin/dashboard");
@@ -168,16 +219,40 @@ app.post("/admin/order/delete", authenticate, async (req, res) => {
 });
 
 app.post("/admin/order/edit", authenticate, async (req, res) => {
-  const { email, status, shipping_address, item, id } = req.body;
+  const {
+    senderName,
+    senderEmail,
+    senderAddress,
+    parcelHeight,
+    parcelWidth,
+    parcelLength,
+    parcelWeight,
+    recipientName,
+    recipientEmail,
+    recipientAddress,
+    item,
+    shipping_address,
+    status,
+    id,
+  } = req.body;
 
   try {
     const { data, error } = await supabase
       .from("order")
       .update({
-        email: email,
-        status: status,
-        shipping_address: shipping_address,
-        item: item,
+        email: recipientEmail,
+        status,
+        sender_address: senderAddress,
+        sender_email: senderEmail,
+        sender_name: senderName,
+        shipping_address,
+        item,
+        recipient_name: recipientName,
+        recipient_address: recipientAddress,
+        height: parcelHeight,
+        length: parcelLength,
+        weight: parcelWeight,
+        width: parcelWidth,
       })
       .eq("id", id)
       .select();
