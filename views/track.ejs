@@ -1,248 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Global Horizon Shipping | Fast And Safe</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="" name="keywords" />
-    <meta content="" name="description" />
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon" />
+<head>
+  <meta charset="utf-8" />
+  <title>Global Horizon Shipping | Track Your Package</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="" name="keywords" />
+  <meta content="" name="description" />
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Roboto:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Favicon -->
+  <link href="img/favicon.ico" rel="icon" />
 
-    <!-- Icon Font Stylesheet -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet" />
 
-    <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet" />
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+  <!-- Icon Font Stylesheet -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Libraries Stylesheet -->
+  <link href="lib/animate/animate.min.css" rel="stylesheet" />
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
 
-    <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet" />
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
 
-    <style>
-      .track-order-details {
-        max-width: 600px; /* Set a maximum width for the table */
-        margin: 20px auto; /* Center the table horizontally */
-        padding: 20px; /* Add padding around the table */
-        background-color: #fff; /* White background for the table */
-        border-radius: 8px; /* Rounded corners */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  <!-- Template Stylesheet -->
+  <link href="css/style.css" rel="stylesheet" />
+
+  <style>
+    .tracking-container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .tracking-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .tracking-timeline {
+      position: relative;
+      padding-left: 30px;
+      margin-bottom: 30px;
+    }
+
+    .timeline-track {
+      position: absolute;
+      left: 12px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background-color: #ccc;
+    }
+
+    .timeline-track.completed {
+      background-color: #6f42c1;
+      /* Purple color for completed */
+    }
+
+    .timeline-track.active {
+      background: linear-gradient(to bottom, #6f42c1 50%, #ccc 50%);
+    }
+
+    .timeline-step {
+      position: relative;
+      padding-bottom: 30px;
+    }
+
+    .step-indicator {
+      position: absolute;
+      left: -30px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background-color: #ccc;
+      border: 2px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      z-index: 2;
+    }
+
+    .step-indicator.completed {
+      background-color: #6f42c1;
+      /* Purple for completed steps */
+    }
+
+    .step-indicator.active {
+      background-color: #6f42c1;
+      box-shadow: 0 0 0 4px rgba(111, 66, 193, 0.3);
+    }
+
+    .step-content {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-left: 10px;
+    }
+
+    .step-status {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .step-details {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .tracking-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .tracking-info-item {
+      flex: 1;
+    }
+
+    .tracking-info-label {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .tracking-info-value {
+      font-weight: bold;
+    }
+
+    .current-status {
+      background-color: #f8f9fa;
+      border-left: 4px solid #6f42c1;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    .current-status-label {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .current-status-value {
+      font-size: 18px;
+      font-weight: bold;
+      color: #6f42c1;
+    }
+
+    @media (max-width: 768px) {
+      .tracking-container {
+        padding: 15px;
+        margin: 20px auto;
       }
+    }
 
-      .track-order-details table {
-        width: 100%; /* Make the table take full width */
-        border-collapse: collapse; /* Remove gaps between cells */
-      }
+    .tracking-search {
+      max-width: 600px;
+      margin: 20px auto;
+    }
+  </style>
+</head>
 
-      .track-order-details th,
-      .track-order-details td {
-        padding: 12px; /* Add padding to table cells */
-        border-bottom: 1px solid #ddd; /* Light border for separation */
-        text-align: left; /* Align text to the left */
-      }
+<body>
+  <!-- Spinner Start -->
+  <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+  <!-- Spinner End -->
 
-      .track-order-details th {
-        background-color: #f2f2f2; /* Light gray background for headers */
-        font-weight: 600; /* Bold headers */
-      }
-
-      /* Responsive styles */
-      @media (max-width: 768px) {
-        .track-order-details {
-          padding: 10px; /* Reduce padding on smaller screens */
-        }
-
-        .track-order-details th,
-        .track-order-details td {
-          padding: 10px; /* Reduce padding on smaller screens */
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- Spinner Start -->
-    <div
-      id="spinner"
-      class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center"
-    >
-      <div
-        class="spinner-grow text-primary"
-        style="width: 3rem; height: 3rem"
-        role="status"
-      >
-        <span class="sr-only">Loading...</span>
+  <nav class="navbar navbar-expand-lg bg-white navbar-light shadow border-top border-5 border-primary sticky-top p-0">
+    <a href="/" class="navbar-brand bg-primary d-flex align-items-center px-4 px-lg-5">
+      <h2 class="mb-2 text-white">Global Horizon Shipping</h2>
+    </a>
+    <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="navbar-nav ms-auto p-4 p-lg-0">
+        <a href="/" class="nav-item nav-link">Home</a>
+        <a href="/about" class="nav-item nav-link">About</a>
+        <a href="/service" class="nav-item nav-link">Services</a>
+        <a href="/contact" class="nav-item nav-link">Contact</a>
+        <a href="/#track-box" class="nav-item nav-link active">Track</a>
       </div>
     </div>
-    <!-- Spinner End -->
+  </nav>
 
-    <nav
-      class="navbar navbar-expand-lg bg-white navbar-light shadow border-top border-5 border-primary sticky-top p-0"
-    >
-      <a
-        href="/"
-        class="navbar-brand bg-primary d-flex align-items-center px-4 px-lg-5"
-      >
-        <h2 class="mb-2 text-white">Global Horizon Shipping</h2>
-      </a>
-      <button
-        type="button"
-        class="navbar-toggler me-4"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarCollapse"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <div class="navbar-nav ms-auto p-4 p-lg-0">
-          <a href="/" class="nav-item nav-link active">Home</a>
-          <a href="/about" class="nav-item nav-link">About</a>
-          <a href="/service" class="nav-item nav-link">Services</a>
-          <a href="/contact" class="nav-item nav-link">Contact</a>
+  <!-- Page Header Start -->
+  <div class="container-fluid page-header py-5" style="margin-bottom: 2rem">
+    <div class="container py-5">
+      <h1 class="display-3 text-white mb-3 animated slideInDown">
+        Track Your Shipment
+      </h1>
+      <nav aria-label="breadcrumb animated slideInDown">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a class="text-white" href="/">Home</a>
+          </li>
+          <li class="breadcrumb-item text-white active" aria-current="page">
+            Track
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+  <!-- Page Header End -->
+
+  <div class="tracking-search">
+    <form class="d-flex" method="get" action="/track">
+      <input class="form-control me-2" type="text" name="id" placeholder="Enter Tracking Number" value="<%= id %>" required />
+      <button class="btn btn-primary" type="submit">Track</button>
+    </form>
+  </div>
+
+  <% if (error) { %>
+  <div class="tracking-container">
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
+  </div>
+  <% } else if (order) { %>
+  <div class="tracking-container">
+    <div class="tracking-header">
+      <h4>GET STATUS UPDATES</h4>
+    </div>
+
+    <div class="current-status">
+      <div class="current-status-label">Current Status</div>
+      <div class="current-status-value"><%= order.status || 'PENDING' %></div>
+    </div>
+
+    <div class="tracking-info">
+      <div class="tracking-info-item">
+        <div class="tracking-info-label">FROM</div>
+        <div class="tracking-info-value"><%= order.sender_address %></div>
+        <div class="tracking-info-label">Label Created</div>
+        <div class="tracking-info-value"><%= new Date(order.created_at).toLocaleDateString() %> <%= new Date(order.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %></div>
+      </div>
+      <div class="tracking-info-item text-end">
+        <div class="tracking-info-label">TO</div>
+        <div class="tracking-info-value"><%= order.recipient_address %></div>
+        <div class="tracking-info-label">Estimated delivery date:</div>
+        <div class="tracking-info-value">
+          <% 
+            // Calculate estimated delivery date (5 days from creation)
+            const createdDate = new Date(order.created_at);
+            const estDelivery = new Date(createdDate);
+            estDelivery.setDate(createdDate.getDate() + 5);
+            %>
+          <%= estDelivery.toLocaleDateString() %> by end of day
         </div>
       </div>
-    </nav>
-
-    <h2 style="margin-top: 100px" id="track-box">Track Your Parcel</h2>
-
-    <div class="track-pad-box">
-      <form class="track-pad-box-row" method="get" action="/track">
-        <input
-          type="text"
-          class="track-pad-box-input"
-          placeholder="Enter Your Tracking ID"
-          aria-label="Tracking ID"
-          name="id"
-          value="<%= id %>"
-        />
-        <button class="btn btn-primary" type="submit" id="button-addon2">
-          Track Now
-        </button>
-      </form>
     </div>
 
-    <div class="track-order-details">
-      <% if (error) { %>
-      <p><%= error %></p>
-      <% } else { %>
-      <table>
+    <div class="tracking-timeline">
+      <div class="timeline-track <%- order.status === 'DELIVERED' ? 'completed' : (order.status === 'OUT FOR DELIVERY' ? 'active' : '') %>"></div>
+
+      <% 
+        // Define all possible statuses in order
+        const allStatuses = [
+          'PACKAGE RECEIVED',
+          'IN TRANSIT',
+          'OUT FOR DELIVERY',
+          'DELIVERED'
+        ];
+        
+        // Define the current status index
+        let currentStatusIndex = allStatuses.indexOf(order.status);
+        if (currentStatusIndex === -1) currentStatusIndex = 0;
+        
+        // Generate timeline steps
+        allStatuses.forEach((status, index) => {
+          const isCompleted = index <= currentStatusIndex;
+          const isActive = index === currentStatusIndex;
+        %>
+      <div class="timeline-step">
+        <div class="step-indicator <%- isCompleted ? 'completed' : '' %> <%- isActive ? 'active' : '' %>">
+          <i class="fas <%- isCompleted ? 'fa-check' : 'fa-circle' %> fa-sm"></i>
+        </div>
+        <div class="step-content">
+          <div class="step-status"><%= status %></div>
+          <% if (isCompleted || isActive) { %>
+          <div class="step-details">
+            <%
+                  // Calculate a date for each status based on creation date
+                  const statusDate = new Date(order.created_at);
+                  statusDate.setDate(statusDate.getDate() + index);
+                  %>
+            <%= statusDate.toLocaleDateString() %> <%= statusDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
+          </div>
+          <% } %>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+
+    <div class="tracking-details">
+      <h5>Package Details</h5>
+      <table class="table">
         <tr>
-          <th>Tracking ID</th>
+          <th>Tracking Number</th>
           <td><%= order.id %></td>
         </tr>
         <tr>
-          <th>Email</th>
-          <td><%= order.email %></td>
-        </tr>
-        <tr>
-          <th>Product Type</th>
+          <th>Item</th>
           <td><%= order.item %></td>
         </tr>
         <tr>
-          <th>Status</th>
-          <td><%= order.status || 'Pending' %></td>
+          <th>Weight</th>
+          <td><%= order.weight %> kg</td>
         </tr>
         <tr>
-          <th>Shipping Address</th>
+          <th>Dimensions</th>
+          <td><%= order.length %> x <%= order.width %> x <%= order.height %> cm</td>
+        </tr>
+        <tr>
+          <th>Shipping Office</th>
           <td><%= order.shipping_address %></td>
         </tr>
       </table>
-      <% } %>
     </div>
+  </div>
+  <% } %>
 
-    <!-- Footer Start -->
-    <div
-      class="container-fluid bg-dark text-light footer pt-5 wow fadeIn"
-      data-wow-delay="0.1s"
-      style="margin-top: 6rem"
-    >
-      <div class="container py-5">
-        <div class="row g-5">
-          <div class="col-lg-3 col-md-6">
-            <h4 class="text-light mb-4">Address</h4>
-            <p class="mb-2">
-              <i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA
-            </p>
-            <p class="mb-2">
-              <i class="fa fa-phone-alt me-3"></i>+012 345 67890
-            </p>
-            <p class="mb-2">
-              <i class="fa fa-envelope me-3"></i>info@example.com
-            </p>
-            <div class="d-flex pt-2">
-              <a class="btn btn-outline-light btn-social" href=""
-                ><i class="fab fa-twitter"></i
-              ></a>
-              <a class="btn btn-outline-light btn-social" href=""
-                ><i class="fab fa-facebook-f"></i
-              ></a>
-              <a class="btn btn-outline-light btn-social" href=""
-                ><i class="fab fa-youtube"></i
-              ></a>
-              <a class="btn btn-outline-light btn-social" href=""
-                ><i class="fab fa-linkedin-in"></i
-              ></a>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <h4 class="text-light mb-4">Services</h4>
-            <a class="btn btn-link" href="/#our-service">Air Freight</a>
-            <a class="btn btn-link" href="/#our-service">Sea Freight</a>
-            <a class="btn btn-link" href="/#our-service">Road Freight</a>
-            <a class="btn btn-link" href="/#our-service">Logistic Solutions</a>
-            <a class="btn btn-link" href="/#our-service">Industry solutions</a>
-          </div>
-          <div class="col-lg-3 col-md-6">
-            <h4 class="text-light mb-4">Quick Links</h4>
-            <a class="btn btn-link" href="/about">About Us</a>
-            <a class="btn btn-link" href="/contact">Contact Us</a>
-            <a class="btn btn-link" href="/service">Our Services</a>
-            <a class="btn btn-link" href="/testimonial">Testimonials</a>
+  <!-- Footer Start -->
+  <div class="container-fluid bg-dark text-light footer pt-5 wow fadeIn" data-wow-delay="0.1s" style="margin-top: 6rem">
+    <div class="container py-5">
+      <div class="row g-5">
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-light mb-4">Address</h4>
+          <p class="mb-2">
+            <i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA
+          </p>
+          <p class="mb-2">
+            <i class="fa fa-phone-alt me-3"></i>+012 345 67890
+          </p>
+          <p class="mb-2">
+            <i class="fa fa-envelope me-3"></i>info@example.com
+          </p>
+          <div class="d-flex pt-2">
+            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
           </div>
         </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-light mb-4">Services</h4>
+          <a class="btn btn-link" href="/#our-service">Air Freight</a>
+          <a class="btn btn-link" href="/#our-service">Sea Freight</a>
+          <a class="btn btn-link" href="/#our-service">Road Freight</a>
+          <a class="btn btn-link" href="/#our-service">Logistic Solutions</a>
+          <a class="btn btn-link" href="/#our-service">Industry solutions</a>
+        </div>
+        <div class="col-lg-3 col-md-6">
+          <h4 class="text-light mb-4">Quick Links</h4>
+          <a class="btn btn-link" href="/about">About Us</a>
+          <a class="btn btn-link" href="/contact">Contact Us</a>
+          <a class="btn btn-link" href="/service">Our Services</a>
+          <a class="btn btn-link" href="/testimonial">Testimonials</a>
+        </div>
       </div>
-      <div class="container">
-        <div class="copyright">
-          <div class="row">
-            <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-              &copy;
-              <a class="border-bottom" href="#">Global Horizon Shipping</a>, All
-              Right Reserved.
-            </div>
+    </div>
+    <div class="container">
+      <div class="copyright">
+        <div class="row">
+          <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+            &copy;
+            <a class="border-bottom" href="#">Global Horizon Shipping</a>, All
+            Right Reserved.
           </div>
         </div>
       </div>
     </div>
-    <!-- Footer End -->
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/counterup/counterup.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+  </div>
+  <!-- Footer End -->
 
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
-  </body>
+  <!-- Back to Top -->
+  <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-0 back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/wow/wow.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/waypoints/waypoints.min.js"></script>
+  <script src="lib/counterup/counterup.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+  <!-- Template Javascript -->
+  <script src="js/main.js"></script>
+</body>
+
 </html>

@@ -4,20 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/admin.css" />
-    <title>Admin Dashboard</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <title>Add New Tracking | Admin Dashboard</title>
+    <style>
+      .status-select {
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        width: 100%;
+        margin-bottom: 15px;
+      }
+
+      .tracking-number-field {
+        margin-bottom: 20px;
+      }
+
+      .tracking-number-note {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+      }
+    </style>
   </head>
   <body>
     <div class="header-dash">
-      <h1 style="padding-left: 30px">Admin Dashboard</h1>
+      <h1 style="padding-left: 30px">Add New Tracking</h1>
       <div style="padding-right: 30px">
+        <a
+          href="/admin/dashboard"
+          style="margin-right: 30px; text-decoration: none; font-size: large"
+          >Dashboard</a
+        >
         <a
           href="/"
           style="margin-right: 30px; text-decoration: none; font-size: large"
           >Home</a
         >
-        <button class="btn btn-primary button">
-          <i class="fas fa-plus"></i> Add New Tracking
-        </button>
       </div>
     </div>
     <form action="/admin/order" method="POST">
@@ -113,20 +138,31 @@
               required
             />
 
-            <label for="status">Status:</label>
+            <label for="tracking_number">Tracking Number:</label>
             <input
               type="text"
-              id="status"
-              name="status"
-              placeholder="Status"
-              value=""
-              required
+              id="tracking_number"
+              name="tracking_number"
+              placeholder="Custom tracking number (optional)"
             />
+            <p class="tracking-number-note">Leave blank to auto-generate</p>
+
+            <label for="status">Status:</label>
+            <select id="status" name="status" class="status-select" required>
+              <option value="PENDING">PENDING</option>
+              <option value="PACKAGE RECEIVED">PACKAGE RECEIVED</option>
+              <option value="IN TRANSIT">IN TRANSIT</option>
+              <option value="OUT FOR DELIVERY">OUT FOR DELIVERY</option>
+              <option value="DELIVERED">DELIVERED</option>
+              <option value="DELIVERY EXCEPTION">DELIVERY EXCEPTION</option>
+              <option value="CLEARANCE DELAY">CLEARANCE DELAY</option>
+              <option value="INCORRECT ADDRESS">INCORRECT ADDRESS</option>
+            </select>
           </section>
         </div>
       </div>
       <button class="btn btn-primary button Upload-tracking">
-        Upload Information
+        <i class="fas fa-plus"></i> Create Tracking
       </button>
     </form>
   </body>

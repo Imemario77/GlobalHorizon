@@ -4,7 +4,6 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { createClient } from "@supabase/supabase-js";
 import { config } from "dotenv";
-import { threadId } from "worker_threads";
 config();
 
 const app = express();
@@ -74,38 +73,54 @@ app.get("/testimonial", (req, res) => {
 
 app.get("/track", async (req, res) => {
   const { id } = req.query;
+
+  if (!id) {
+    return res.render("track", { id: "", error: null, order: null });
+  }
+
   try {
-    // Fetch order details using the tracking ID
+    // Fetch order details using the tracking ID (now can be custom tracking number)
     const { data: order, error } = await supabase
-      .from("order") // Replace with your actual table name
+      .from("order")
       .select("*")
-      .eq("id", id) // Adjust this to the correct column name
+      // .or(`id.eq.${id},tracking_number.eq.${id}`)
+      .eq("tracking_number", id)
       .single();
 
     // Handle error from Supabase
     if (error || !order) {
-      return res.render("track", { error: "Tracking id is invalid.", id });
+      return res.render("track", {
+        error: "Tracking ID is invalid.",
+        id,
+        order: null,
+      });
     }
 
-    // Render the order details page (create an appropriate EJS template)
+    // Render the order details page
     res.render("track", { order, id, error: null });
   } catch (err) {
     console.error(err); // Log the error for debugging
     res.render("track", {
       error: "An error occurred while fetching the order.",
       id,
+      order: null,
     });
   }
 });
 
 app.get("/admin/dashboard", authenticate, async (req, res) => {
   try {
-    const { data: orders, error } = await supabase.from("order").select("*");
-    if (error) throw Error("An error occured");
+    const { data: orders, error } = await supabase
+      .from("order")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw Error("An error occurred");
     res.render("admin/index", { orders, error: null });
   } catch (error) {
     res.render("admin/index", {
       error: "An error occurred while fetching orders.",
+      orders: [],
     });
   }
 });
@@ -162,7 +177,19 @@ app.get("/admin/order/:id/edit", authenticate, async (req, res) => {
     return res.status(404).send("Order not found");
   }
 
-  res.render("admin/editTrack", { order });
+  // Get list of statuses for dropdown
+  const statuses = [
+    "PACKAGE RECEIVED",
+    "IN TRANSIT",
+    "OUT FOR DELIVERY",
+    "DELIVERED",
+    "DELIVERY EXCEPTION",
+    "CLEARANCE DELAY",
+    "INCORRECT ADDRESS",
+    "PENDING",
+  ];
+
+  res.render("admin/editTrack", { order, statuses });
 });
 
 // post routes
@@ -182,28 +209,37 @@ app.post("/admin/order", authenticate, async (req, res) => {
     item,
     shipping_address,
     status,
+    tracking_number,
   } = req.body;
 
   const userId = req.user.id; // Get user ID
 
-  const { error } = await supabase.from("order").insert([
-    {
-      userId,
-      email: recipientEmail,
-      status,
-      sender_address: senderAddress,
-      sender_email: senderEmail,
-      sender_name: senderName,
-      shipping_address,
-      item,
-      recipient_name: recipientName,
-      recipient_address: recipientAddress,
-      height: parcelHeight,
-      length: parcelLength,
-      weight: parcelWeight,
-      width: parcelWidth,
-    },
-  ]);
+  // Generate tracking number if not provided
+  const finalTrackingNumber =
+    tracking_number || `GHS${Math.floor(100000 + Math.random() * 900000)}`;
+
+  const { data, error } = await supabase
+    .from("order")
+    .insert([
+      {
+        userId,
+        email: recipientEmail,
+        status: status || "PENDING",
+        sender_address: senderAddress,
+        sender_email: senderEmail,
+        sender_name: senderName,
+        shipping_address,
+        item,
+        recipient_name: recipientName,
+        recipient_address: recipientAddress,
+        height: parcelHeight,
+        length: parcelLength,
+        weight: parcelWeight,
+        width: parcelWidth,
+        tracking_number: finalTrackingNumber,
+      },
+    ])
+    .select();
 
   if (error) return res.status(400).send(error.message);
   res.redirect("/admin/dashboard");
@@ -234,6 +270,7 @@ app.post("/admin/order/edit", authenticate, async (req, res) => {
     shipping_address,
     status,
     id,
+    tracking_number,
   } = req.body;
 
   try {
@@ -253,6 +290,7 @@ app.post("/admin/order/edit", authenticate, async (req, res) => {
         length: parcelLength,
         weight: parcelWeight,
         width: parcelWidth,
+        tracking_number: tracking_number,
       })
       .eq("id", id)
       .select();
@@ -262,6 +300,26 @@ app.post("/admin/order/edit", authenticate, async (req, res) => {
     res.redirect("/admin/order/" + id);
   } catch (error) {
     console.log(error);
+    res.status(500).send("Server error");
+  }
+});
+
+// Route to update just the status (for quick status updates)
+app.post("/admin/order/update-status", authenticate, async (req, res) => {
+  const { id, status } = req.body;
+
+  try {
+    const { error } = await supabase
+      .from("order")
+      .update({ status })
+      .eq("id", id);
+
+    if (error) throw error;
+
+    res.redirect("/admin/order/" + id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating status");
   }
 });
 
@@ -269,9 +327,9 @@ app.post("/admin/order/edit", authenticate, async (req, res) => {
 // Register User
 app.post("/admin/register", async (req, res) => {
   const { email, password } = req.body;
-  if (email.lenght == 0 || password.lenght == 0)
+  if (!email || !password || email.length == 0 || password.length == 0)
     return res.render("admin/register", {
-      error: "no field should be left empty",
+      error: "No field should be left empty",
     });
   try {
     const { user, error } = await supabase.auth.signUp({ email, password });
@@ -290,9 +348,9 @@ app.post("/admin/register", async (req, res) => {
 app.post("/admin/login", async (req, res) => {
   const { email, password } = req.body;
 
-  if (email.lenght == 0 || password.lenght == 0)
+  if (!email || !password || email.length == 0 || password.length == 0)
     return res.render("admin/login", {
-      error: "no field should be left empty",
+      error: "No field should be left empty",
     });
 
   const {
@@ -314,9 +372,9 @@ app.post("/admin/login", async (req, res) => {
 app.post("/admin/reset", async (req, res) => {
   const { email } = req.body;
   try {
-    if (email.lenght == 0)
+    if (!email || email.length == 0)
       return res.render("admin/login", {
-        error: "no field should be left empty",
+        error: "No field should be left empty",
       });
 
     let { data, error } = await supabase.auth.resetPasswordForEmail(email);
@@ -326,9 +384,9 @@ app.post("/admin/reset", async (req, res) => {
         .status(401)
         .render("admin/reset", { error: error.message, sent: false });
 
-    res.render("/admin/reset", { sent: true, error: null });
+    res.render("admin/reset", { sent: true, error: null });
   } catch (error) {
-    res.render("/admin/reset", { sent: true, error: error.message });
+    res.render("admin/reset", { sent: false, error: error.message });
   }
 });
 
@@ -347,13 +405,14 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  const errorcode = err == "Error: Not Found" ? 404 : 500; // Default to 500 for internal server error
+  const errorcode = err.message == "Not Found" ? 404 : 500; // Default to 500 for internal server error
   const errorMessage =
-    err == "Error: Not Found" ? "Page Not Found" : "Internal Server Error";
+    err.message == "Not Found" ? "Page Not Found" : "Internal Server Error";
+  console.log(err);
   res.status(errorcode).render("404", { errorcode, errorMessage });
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5050;
 httpServer.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

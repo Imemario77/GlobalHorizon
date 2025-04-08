@@ -4,16 +4,72 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/admin.css" />
-    <title>Admin Dashboard</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <title>Edit Tracking | Admin Dashboard</title>
+    <style>
+      .status-select {
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        width: 100%;
+        margin-bottom: 15px;
+      }
+      
+      .tracking-number-field {
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+      
+      .tracking-number-note {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+      }
+      
+      .btn-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+      }
+      
+      .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+      
+      .btn-primary {
+        background-color: #ff3e41;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
     <div class="header-dash">
-      <h1 style="padding-left: 30px">Admin Dashboard</h1>
+      <h1 style="padding-left: 30px">Edit Tracking Information</h1>
       <div style="padding-right: 30px">
         <a
           href="/admin/order/<%= order.id %>"
           style="margin-right: 30px; text-decoration: none; font-size: large"
           >Cancel</a
+        >
+        <a
+          href="/admin/dashboard"
+          style="margin-right: 30px; text-decoration: none; font-size: large"
+          >Dashboard</a
         >
       </div>
     </div>
@@ -144,21 +200,41 @@
               required
             />
 
+            <div class="tracking-number-field">
+              <label for="tracking_number">Tracking Number:</label>
+              <input
+                type="text"
+                id="tracking_number"
+                name="tracking_number"
+                placeholder="Custom tracking number"
+                value="<%= order.tracking_number || '' %>"
+              />
+              <p class="tracking-number-note">This is what customers use to track their shipment</p>
+            </div>
+
             <label for="status">Status:</label>
-            <input
-              type="text"
-              id="status"
-              name="status"
-              placeholder="Status"
-              value="<%= order.status %>"
-              required
-            />
+            <select id="status" name="status" class="status-select" required>
+              <option value="PENDING" <%= order.status === 'PENDING' ? 'selected' : '' %>>PENDING</option>
+              <option value="PACKAGE RECEIVED" <%= order.status === 'PACKAGE RECEIVED' ? 'selected' : '' %>>PACKAGE RECEIVED</option>
+              <option value="IN TRANSIT" <%= order.status === 'IN TRANSIT' ? 'selected' : '' %>>IN TRANSIT</option>
+              <option value="OUT FOR DELIVERY" <%= order.status === 'OUT FOR DELIVERY' ? 'selected' : '' %>>OUT FOR DELIVERY</option>
+              <option value="DELIVERED" <%= order.status === 'DELIVERED' ? 'selected' : '' %>>DELIVERED</option>
+              <option value="DELIVERY EXCEPTION" <%= order.status === 'DELIVERY EXCEPTION' ? 'selected' : '' %>>DELIVERY EXCEPTION</option>
+              <option value="CLEARANCE DELAY" <%= order.status === 'CLEARANCE DELAY' ? 'selected' : '' %>>CLEARANCE DELAY</option>
+              <option value="INCORRECT ADDRESS" <%= order.status === 'INCORRECT ADDRESS' ? 'selected' : '' %>>INCORRECT ADDRESS</option>
+              <% if (!['PENDING', 'PACKAGE RECEIVED', 'IN TRANSIT', 'OUT FOR DELIVERY', 'DELIVERED', 'DELIVERY EXCEPTION', 'CLEARANCE DELAY', 'INCORRECT ADDRESS'].includes(order.status)) { %>
+                <option value="<%= order.status %>" selected><%= order.status %></option>
+              <% } %>
+            </select>
           </section>
         </div>
       </div>
-      <button class="btn btn-primary button Upload-tracking">
-        Update Information
-      </button>
+      <div class="btn-container">
+        <a href="/admin/order/<%= order.id %>" class="btn-cancel">Cancel</a>
+        <button type="submit" class="btn btn-primary button Upload-tracking">
+          <i class="fas fa-save"></i> Update Information
+        </button>
+      </div>
     </form>
   </body>
 </html>
